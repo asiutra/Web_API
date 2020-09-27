@@ -8,10 +8,14 @@ namespace RESTfulAPI_CarService.Service.Interfaces
 {
     public interface ICarServiceService
     {
-        Task<bool> CreateAsync(CarService carService);
-        Task<CarService> GetAsync(int id);
-        Task<IEnumerable<CarService>> GetAllAsync();
-        Task<bool> UpdateAsync(CarService carService);
-        Task<bool> DeleteAsync(int id);
+        //Task<bool> CreateAsync(CarService carService);
+        Task <ServiceResponse<IEnumerable<CarService>>> CreateAsync(CarService carService);
+        Task <ServiceResponse<CarService>> GetAsync(int id);
+        Task <ServiceResponse<IEnumerable<CarService>>> GetAllAsync();
+
+        
+        //change two Interface return type to CarService and add ServiceResponse
+        Task <bool> UpdateAsync(CarService carService); 
+        Task <bool> DeleteAsync(int id);
     }
 }
