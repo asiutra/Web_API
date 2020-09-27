@@ -19,20 +19,41 @@ namespace RESTfulAPI_CarService.Service
         }
 
 
-        public async Task<bool> CreateAsync(CarService carService)
+        //public async Task<CarService> CreateAsync(CarService carService)
+        //{
+        //    await _context.CarServices.AddAsync(carService);
+        //    //return _context.CarServices.Add(carService);
+        //    //return await _context.SaveChangesAsync() > 0;
+        //}
+
+
+        public async Task<ServiceResponse<IEnumerable<CarService>>> CreateAsync(CarService carService)
         {
+            ServiceResponse<IEnumerable<CarService>> serviceResponse = new ServiceResponse<IEnumerable<CarService>>();
             _context.CarServices.Add(carService);
-            return await _context.SaveChangesAsync() > 0;
+            serviceResponse.Data = await _context.CarServices.ToListAsync();
+            return serviceResponse;
+
+            //return await _context.CarServices.ToListAsync();
         }
 
-        public async Task<CarService> GetAsync(int id)
+
+        public async Task<ServiceResponse<CarService>> GetAsync(int id)
         {
-            return await _context.CarServices.SingleOrDefaultAsync(s => s.Id == id);
+            ServiceResponse<CarService> serviceResponse = new ServiceResponse<CarService>();
+            serviceResponse.Data = await _context.CarServices.SingleOrDefaultAsync(x => x.Id == id);
+            return serviceResponse;
+
+            //return await _context.CarServices.SingleOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<IEnumerable<CarService>> GetAllAsync()
+        public async Task<ServiceResponse<IEnumerable<CarService>>> GetAllAsync()
         {
-            return await _context.CarServices.ToListAsync();
+            ServiceResponse<IEnumerable<CarService>> serviceResponse = new ServiceResponse<IEnumerable<CarService>>();
+            serviceResponse.Data = await _context.CarServices.ToListAsync();
+            return serviceResponse;
+
+            //return await _context.CarServices.ToListAsync();
         }
 
         public async Task<bool> UpdateAsync(CarService carService)
@@ -50,5 +71,6 @@ namespace RESTfulAPI_CarService.Service
             return await _context.SaveChangesAsync() > 0;
 
         }
+
     }
 }

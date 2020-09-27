@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RESTfulAPI_CarService.Context;
 using RESTfulAPI_CarService.Service;
+using RESTfulAPI_CarService.Service.Interfaces;
 
 namespace RESTfulAPI_CarService
 {
@@ -34,6 +35,7 @@ namespace RESTfulAPI_CarService
 
             // Create new instance of the implementation type for the first request only. It then reuses it for every subsequent request
             services.AddSingleton<IRepository, Repository>();
+            services.AddScoped<ICarServiceService, CarServiceService>();
             services.AddControllersWithViews();
         }
 
