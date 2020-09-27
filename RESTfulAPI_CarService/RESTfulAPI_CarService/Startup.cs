@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,7 @@ namespace RESTfulAPI_CarService
             services.AddDbContext<CarServiceContext>(builder =>
                 builder.UseSqlServer(Configuration.GetConnectionString("SQL")));
 
+            services.AddAutoMapper(typeof(Startup));
             // Create new instance of the implementation type for the first request only. It then reuses it for every subsequent request
             services.AddSingleton<IRepository, Repository>();
             services.AddScoped<ICarServiceService, CarServiceService>();
