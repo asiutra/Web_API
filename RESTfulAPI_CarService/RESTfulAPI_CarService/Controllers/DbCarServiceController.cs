@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RESTfulAPI_CarService.Dtos.CarService;
 using RESTfulAPI_CarService.Models;
 using RESTfulAPI_CarService.Service;
 using RESTfulAPI_CarService.Service.Interfaces;
@@ -47,7 +48,7 @@ namespace RESTfulAPI_CarService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRecord(CarService carService)
+        public async Task<IActionResult> AddRecord(AddCarServiceDto carService)
         {
             return Ok(await _carServiceService.CreateAsync(carService));
         }
