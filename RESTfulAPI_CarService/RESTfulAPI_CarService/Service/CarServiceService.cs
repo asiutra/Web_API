@@ -35,6 +35,8 @@ namespace RESTfulAPI_CarService.Service
         {
             ServiceResponse<IEnumerable<GetCarServiceDto>> serviceResponse = new ServiceResponse<IEnumerable<GetCarServiceDto>>();
             _context.CarServices.Add(_mapper.Map<CarService>(carService));
+            await _context.SaveChangesAsync();
+
             serviceResponse.Data = (await _context.CarServices.Select(c => _mapper.Map<GetCarServiceDto>(c)).ToListAsync());
             return serviceResponse;
 
@@ -60,24 +62,48 @@ namespace RESTfulAPI_CarService.Service
             //return await _context.CarServices.ToListAsync();
         }
 
+        public async Task<ServiceResponse<GetCarServiceDto>> UpdateAsync(UpdateCarServiceDto updatedCarService)
+        {
+            ServiceResponse<GetCarServiceDto> seriveResponse = new ServiceResponse<GetCarServiceDto>();
+
+            try
+            {
+                var carService = await _context.CarServices.FirstOrDefaultAsync(c => c.Id == updatedCarService.Id);
+                carService.WhatService = updatedCarService.WhatService;
+                carService.When = updatedCarService.When;
+                carService.Price = updatedCarService.Price;
+                carService.RegistrationNO = updatedCarService.RegistrationNO;
+
+                seriveResponse.Data = _mapper.Map<GetCarServiceDto>(carService);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                seriveResponse.Success = false;
+                seriveResponse.Message = ex.Message;
+            }
+
+            return seriveResponse;
+        }
 
 
+        public async Task<ServiceResponse<GetCarServiceDto>> DeleteAsync(int id)
+        {
+            ServiceResponse<GetCarServiceDto> serviceResponse = new ServiceResponse<GetCarServiceDto>();
 
-        //public async Task<bool> UpdateAsync(AddCarServiceDto carService)
-        //{
-        //    _context.CarServices.Update(carService);
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
+            try
+            {
+                var carService = await _context.CarServices.FirstAsync(c => c.Id == id);
+                _context.CarServices.Remove(carService);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
 
-        //public async Task<bool> DeleteAsync(int id)
-        //{
-        //    var cs = _context.CarServices.SingleOrDefault(s => s.Id == id);
-        //    if (cs == null) return false;
-
-        //    _context.CarServices.Remove(cs);
-        //    return await _context.SaveChangesAsync() > 0;
-
-        //}
-
+            return serviceResponse;
+        }
     }
 }
