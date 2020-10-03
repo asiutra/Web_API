@@ -31,6 +31,7 @@ namespace RESTfulAPI_CarService.Controllers
         //    return repo.CarServices.Where(x => x.Id == id);
         //}
 
+
         // api/DbCarService/GetAll
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
@@ -47,10 +48,28 @@ namespace RESTfulAPI_CarService.Controllers
             return Ok(record);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddRecord(AddCarServiceDto carService)
+        // api/DbCarService/Add
+        [HttpPost("Add")]
+        public async Task<IActionResult> AddRecord([FromBody]AddCarServiceDto carService)
         {
             return Ok(await _carServiceService.CreateAsync(carService));
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRecord(UpdateCarServiceDto updatedCarService)
+        {
+            return Ok(await _carServiceService.UpdateAsync(updatedCarService));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRecord(int id)
+        {
+            ServiceResponse<GetCarServiceDto> response = await _carServiceService.DeleteAsync(id);
+            if (response.Data == null)
+                return NotFound(response);
+
+            return Ok(response);
+        }
+
     }
 }
